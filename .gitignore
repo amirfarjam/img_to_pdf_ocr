@@ -1,21 +1,33 @@
-# --- Project Folders to Ignore ---
+# ========================
+# Project Data Folders
+# ========================
 input_images/
-output_pdf/
+output_pdf_image/
+output_pdf_ocr/
 
-# --- macOS System Files ---
+# ========================
+# macOS System Files
+# ========================
 .DS_Store
 .AppleDouble
 .LSOverride
-
-# Thumbnail cache files
 ._*
 
-# Directories used by macOS
-.Spotlight-V100
-.Trashes
-.fseventsd
+# ========================
+# VS Code
+# ========================
+.vscode/
 
-# macOS temp files
+# ========================
+# Python Cache
+# ========================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# ========================
+# Temporary / Swap Files
+# ========================
 *.swp
 *.swo
-

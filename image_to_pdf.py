@@ -1,21 +1,18 @@
 import os
 import math
-import pytesseract
 from PIL import Image
 from reportlab.lib.pagesizes import A4
-from reportlab.lib.units import inch
 from reportlab.pdfgen import canvas
 from reportlab.lib.utils import ImageReader
-from reportlab.lib.colors import Color
 
 # =========================
 # CONFIGURATION
 # =========================
 
 IMAGE_FOLDER = "input_images"
-OUTPUT_PDF = "output_pdf_ocr/image_and_ocr.pdf"
+OUTPUT_PDF = "output_pdf_image/image_only.pdf"
 
-os.makedirs("output_pdf_ocr", exist_ok=True)
+os.makedirs("output_pdf_image", exist_ok=True)
 
 # =========================
 # PDF SETUP
@@ -31,7 +28,7 @@ c = canvas.Canvas(OUTPUT_PDF, pagesize=A4)
 def get_creation_time(path):
     stat = os.stat(path)
 
-    # macOS: true creation time
+    # macOS true creation time
     if hasattr(stat, "st_birthtime"):
         return stat.st_birthtime
 
@@ -50,7 +47,7 @@ files_sorted_by_time = sorted(
 )
 
 # =========================
-# IMAGE PROCESSING FUNC
+# IMAGE PROCESSING
 # =========================
 
 def process_image(image_path: str):
@@ -77,10 +74,7 @@ def process_image(image_path: str):
         # ---- Crop vertical slice ----
         slice_img = img.crop((0, top, img_w, bottom))
 
-        # ---- OCR this slice ----
-        text = pytesseract.image_to_string(slice_img)
-
-        # ---- Draw image FULL PAGE ----
+        # ---- Draw image FULL PAGE (no OCR layer!) ----
         image_reader = ImageReader(slice_img)
 
         c.drawImage(
@@ -93,18 +87,6 @@ def process_image(image_path: str):
             anchor='sw'
         )
 
-        # ---- Add lightly invisible OCR text layer ----
-        text_obj = c.beginText()
-        text_obj.setTextOrigin(0.5 * inch, pdf_height - 0.5 * inch)
-        text_obj.setFont("Helvetica", 8)
-
-        # Almost invisible but searchable
-        text_obj.setFillColor(Color(0, 0, 0, alpha=0.01))
-
-        for line in text.splitlines():
-            text_obj.textLine(line)
-
-        c.drawText(text_obj)
         c.showPage()
 
 # =========================
@@ -121,5 +103,5 @@ for filename in files_sorted_by_time:
 # =========================
 
 c.save()
-print("\n Done! Searchable PDF created at:")
+print("\n✅ Image-only PDF created for Acrobat OCR:")
 print("➡", OUTPUT_PDF)
