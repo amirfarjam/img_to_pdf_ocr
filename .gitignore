@@ -1,0 +1,21 @@
+# --- Project Folders to Ignore ---
+input_images/
+output_pdf/
+
+# --- macOS System Files ---
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Thumbnail cache files
+._*
+
+# Directories used by macOS
+.Spotlight-V100
+.Trashes
+.fseventsd
+
+# macOS temp files
+*.swp
+*.swo
+
